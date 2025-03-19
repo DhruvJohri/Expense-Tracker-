@@ -65,7 +65,9 @@ const registerUser = async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email
-            }
+            },
+            accessToken, // Include the access token in the response
+            refreshToken // Include the refresh token in the response
         });
     } catch (error) {
         console.error(error);
@@ -103,7 +105,9 @@ const loginUser = async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email
-            }
+            },
+            accessToken, // Include the access token in the response
+            refreshToken // Include the refresh token in the response
         });
     } catch (error) {
         console.error(error);
@@ -136,7 +140,11 @@ const refreshToken = async (req, res) => {
         // Set new cookies
         setTokenCookies(res, tokens.accessToken, tokens.refreshToken);
         
-        res.json({ message: "Token refreshed successfully" });
+        res.json({ 
+            message: "Token refreshed successfully",
+            accessToken: tokens.accessToken, // Include the new access token in the response
+            refreshToken: tokens.refreshToken // Include the new refresh token in the response
+        });
     } catch (error) {
         console.error(error);
         
