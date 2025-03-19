@@ -28,6 +28,7 @@ app.use(cors({
             'https://expense-tracker-five-self.vercel.app',
             'https://expense-tracker-seven.vercel.app',
             'https://expense-tracker-backend.vercel.app'
+            'https://expense-tracker-duco.vercel.app'
         ];
         
         // Check if the origin is allowed
