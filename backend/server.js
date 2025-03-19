@@ -6,6 +6,22 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
+// Add this at the top of server.js
+process.on('uncaughtException', (error) => {
+  console.error('UNCAUGHT EXCEPTION:', error);
+});
+
+// Log all environment variables at startup (redacted for security)
+console.log('Environment variables check at startup:');
+console.log({
+  NODE_ENV: process.env.NODE_ENV || 'not set',
+  MONGO_URI: process.env.MONGO_URI ? 'set (value hidden)' : 'not set',
+  JWT_SECRET: process.env.JWT_SECRET ? 'set (value hidden)' : 'not set',
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET ? 'set (value hidden)' : 'not set',
+  PORT: process.env.PORT || 'not set',
+  CLIENT_URL: process.env.CLIENT_URL || 'not set',
+});
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
