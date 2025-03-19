@@ -5,21 +5,50 @@ const API = axios.create({
   withCredentials: true // This allows cookies to be sent with requests
 });
 
+// Add token to requests if available
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Authentication API
 export const loginUser = async (credentials) => {
-  return API.post("/auth/login", credentials);
+  const response = await API.post("/auth/login", credentials);
+  // Store token in localStorage if it's in the response
+  if (response.data && response.data.accessToken) {
+    localStorage.setItem('accessToken', response.data.accessToken);
+  }
+  return response;
 };
 
 export const registerUser = async (userData) => {
-  return API.post("/auth/register", userData);
+  const response = await API.post("/auth/register", userData);
+  // Store token in localStorage if it's in the response
+  if (response.data && response.data.accessToken) {
+    localStorage.setItem('accessToken', response.data.accessToken);
+  }
+  return response;
 };
 
 export const logoutUser = async () => {
+  // Remove token from localStorage when logging out
+  localStorage.removeItem('accessToken');
   return API.post("/auth/logout");
 };
 
 export const refreshToken = async () => {
-  return API.post("/auth/refresh-token");
+  const response = await API.post("/auth/refresh-token");
+  // Update token in localStorage if a new one is returned
+  if (response.data && response.data.accessToken) {
+    localStorage.setItem('accessToken', response.data.accessToken);
+  }
+  return response;
 };
 
 export const getCurrentUser = async () => {
@@ -41,11 +70,12 @@ API.interceptors.response.use(
       
       try {
         // Try to refresh the token
-        await refreshToken();
+        const response = await refreshToken();
         // If successful, retry the original request
         return API(originalRequest);
       } catch (refreshError) {
         // If refresh fails, redirect to login
+        localStorage.removeItem('accessToken');
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }
