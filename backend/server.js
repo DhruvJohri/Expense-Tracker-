@@ -26,41 +26,12 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// More permissive CORS settings
+// Simplified CORS configuration - allow all origins
 app.use(cors({
-    origin: function(origin, callback) {
-        // Allow requests with no origin (like mobile apps, curl requests)
-        if(!origin) return callback(null, true);
-        
-        // List of allowed origins
-        const allowedOrigins = [
-            'http://localhost:5173', 
-            'http://localhost:5174',
-            'https://expense-tracker-vercel.app',
-            'https://expense-tracker-frontend.vercel.app',
-            'https://expense-tracker-dhruv-johri.vercel.app',
-            'https://expense-tracker-.vercel.app',
-            'https://expense-tracker-git-main-dhruv-johri.vercel.app',
-            'https://expense-tracker-five-self.vercel.app',
-            'https://expense-tracker-seven.vercel.app',
-            'https://expense-tracker-backend.vercel.app',
-            'https://expense-tracker-duco.vercel.app'
-        ];
-        
-        // Check if the origin is allowed
-        if(allowedOrigins.indexOf(origin) === -1) {
-            // If it's not in our list, log it but still allow it in development
-            console.log('Origin not allowed by CORS:', origin);
-            if(process.env.NODE_ENV !== 'production') {
-                return callback(null, true);
-            }
-        }
-        
-        return callback(null, true);
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
+  origin: true, // Allow all origins
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.get('/', (req, res) => {
