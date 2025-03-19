@@ -4,9 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-const app = express();
-
-// Add this at the top of server.js
+// Add global error handling
 process.on('uncaughtException', (error) => {
   console.error('UNCAUGHT EXCEPTION:', error);
 });
@@ -21,6 +19,8 @@ console.log({
   PORT: process.env.PORT || 'not set',
   CLIENT_URL: process.env.CLIENT_URL || 'not set',
 });
+
+const app = express();
 
 // Middleware
 app.use(express.json());
@@ -43,7 +43,7 @@ app.use(cors({
             'https://expense-tracker-git-main-dhruv-johri.vercel.app',
             'https://expense-tracker-five-self.vercel.app',
             'https://expense-tracker-seven.vercel.app',
-            'https://expense-tracker-backend.vercel.app'
+            'https://expense-tracker-backend.vercel.app',
             'https://expense-tracker-duco.vercel.app'
         ];
         
@@ -67,12 +67,40 @@ app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
 
+// Simple test routes to check if server is running at all
+app.get('/test', (req, res) => {
+  res.json({ status: 'Server is running, but DB connection may have failed' });
+});
+
+// Debug endpoint to check environment variables (redacted for security)
+app.get('/debug', (req, res) => {
+  const envStatus = {
+    NODE_ENV: process.env.NODE_ENV || 'not set',
+    MONGO_URI: process.env.MONGO_URI ? 'set (value hidden)' : 'not set',
+    JWT_SECRET: process.env.JWT_SECRET ? 'set (value hidden)' : 'not set',
+    JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET ? 'set (value hidden)' : 'not set',
+    PORT: process.env.PORT || 'not set',
+    CLIENT_URL: process.env.CLIENT_URL || 'not set',
+    mongodb_connected: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+  };
+  
+  res.json(envStatus);
+});
 
 // Connect to MongoDB
+console.log("Attempting to connect to MongoDB...");
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 10000 // Timeout after 10 seconds
+  })
   .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+  .catch((err) => {
+    console.error("❌ MongoDB Connection Error:", err);
+    // Try to create a minimal server even if DB connection fails
+    console.log("Continuing server initialization despite MongoDB connection error");
+  });
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
