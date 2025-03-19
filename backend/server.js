@@ -46,6 +46,11 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+app.get('/', (req, res) => {
+  res.send('Backend is running!');
+});
+
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
