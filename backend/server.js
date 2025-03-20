@@ -4,12 +4,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-// Add global error handling
+
+
 process.on('uncaughtException', (error) => {
   console.error('UNCAUGHT EXCEPTION:', error);
 });
 
-// Log all environment variables at startup (redacted for security)
+
 console.log('Environment variables check at startup:');
 console.log({
   NODE_ENV: process.env.NODE_ENV || 'not set',
@@ -22,11 +23,11 @@ console.log({
 
 const app = express();
 
-// Middleware
+
 app.use(express.json());
 app.use(cookieParser());
 
-// Simplified CORS configuration - allow all origins
+
 app.use(cors({
   origin: true, // Allow all origins
   credentials: true,
@@ -38,12 +39,10 @@ app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
 
-// Simple test routes to check if server is running at all
 app.get('/test', (req, res) => {
   res.json({ status: 'Server is running, but DB connection may have failed' });
 });
 
-// Debug endpoint to check environment variables (redacted for security)
 app.get('/debug', (req, res) => {
   const envStatus = {
     NODE_ENV: process.env.NODE_ENV || 'not set',
@@ -57,6 +56,7 @@ app.get('/debug', (req, res) => {
   
   res.json(envStatus);
 });
+
 
 // Connect to MongoDB
 console.log("Attempting to connect to MongoDB...");
