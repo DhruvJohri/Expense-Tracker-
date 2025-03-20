@@ -93,23 +93,24 @@ View all your expenses in a list format. You can:
 Gain valuable insights into your spending habits through visual charts and breakdowns.
 
 ## 🧩 Project Structure
-expense-tracker/
--├── backend/ # Node.js backend
--│ ├── api/ # Vercel serverless functions entry point
--│ ├── config/ # Configuration files
--│ ├── controllers/ # Request handlers
--│ ├── middleware/ # Authentication middleware
--│ ├── models/ # MongoDB schemas
--│ ├── routes/ # API routes
--│ └── server.js # Main server file
--│
--└── expense-tracker/ # React frontend
--├── public/ # Static files
--└── src/
--├── assets/ # Images and static resources
--├── components/ # Reusable UI components
--├── pages/ # Application pages
--└── api.js # API service for backend communication
+'''expense-tracker/
+├── backend/ # Node.js backend
+│ ├── api/ # Vercel serverless functions entry point
+│ ├── config/ # Configuration files
+│ ├── controllers/ # Request handlers
+│ ├── middleware/ # Authentication middleware
+│ ├── models/ # MongoDB schemas
+│ ├── routes/ # API routes
+│ └── server.js # Main server file
+│
+└── expense-tracker/ # React frontend
+├── public/ # Static files
+└── src/
+├── assets/ # Images and static resources
+├── components/ # Reusable UI components
+├── pages/ # Application pages
+└── api.js # API service for backend communication
+'''
 
 ## 🔒 Security Features
 - JWT authentication with refresh tokens
