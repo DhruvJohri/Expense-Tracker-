@@ -6,7 +6,7 @@
 ## ✨ Overview
 Expense Tracker is a full-stack web application that helps you manage your personal finances by tracking your income and expenses. With an intuitive interface and powerful features, it makes financial management easy and accessible.
 
-![Expense Tracker Screenshot](https://i.imgur.com/placeholder-image.png)
+
 
 ## 🛠️ Built With
 - **Frontend**: React.js, React Router, Axios
